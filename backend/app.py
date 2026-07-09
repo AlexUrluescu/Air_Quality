@@ -18,6 +18,14 @@ try:
 except Exception as e:
     print(f"Eroare critică la încărcarea fișierelor ML: {e}")
 
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({
+        'status': 'online',
+        'message': 'AeroActive API is running perfectly!',
+        'model_status': 'loaded'
+    }), 200
+
 @app.route('/api/v1/predict', methods=['POST'])
 def predict_air_quality():
     data = request.get_json()
