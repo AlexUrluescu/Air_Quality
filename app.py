@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
-
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 try:
     model = joblib.load('model_aer.pkl')
