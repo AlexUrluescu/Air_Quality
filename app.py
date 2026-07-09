@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 import joblib
 import numpy as np
 
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+
 app = Flask(__name__)
 
 try:
@@ -9,8 +13,7 @@ try:
     label_encoder = joblib.load('label_encoder.pkl')
     print("Modelul și Label Encoder-ul au fost încărcate cu succes!")
 except Exception as e:
-    print(f"✗ Eroare critică la încărcarea fișierelor ML: {e}")
-
+    print(f"Eroare critică la încărcarea fișierelor ML: {e}")
 
 @app.route('/api/v1/predict', methods=['POST'])
 def predict_air_quality():
@@ -46,5 +49,16 @@ def predict_air_quality():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    port = 5001
+    print(f"Se inițializează containerul WSGI Tornado...")
+    
+    container = WSGIContainer(app)
+    
+    http_server = HTTPServer(container)
+    http_server.listen(port)
+    
+    print(f"Serverul de producție Tornado rulează asincron pe: http://127.0.0.1:{port}")
+    
+    IOLoop.current().start()
