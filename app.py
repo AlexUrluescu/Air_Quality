@@ -6,6 +6,7 @@ from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from flask_cors import CORS
 import pandas as pd
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -54,14 +55,12 @@ def predict_air_quality():
 
 
 if __name__ == '__main__':
-    port = 5001
-    print(f"Se inițializează containerul WSGI Tornado...")
+    port = int(os.environ.get("PORT", 5001))
+    print(f"The WSGI Container for Tornado is initializing on port {port}...")
     
     container = WSGIContainer(app)
-    
     http_server = HTTPServer(container)
     http_server.listen(port)
     
-    print(f"Serverul de producție Tornado rulează asincron pe: http://127.0.0.1:{port}")
-    
+    print(f"Production Tornado server is running...")
     IOLoop.current().start()
