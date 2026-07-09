@@ -9,6 +9,7 @@ dependencies = [
     "flask-cors>=6.0.5",
     "joblib>=1.5.3",
     "numpy>=2.5.1",
+    "pandas>=3.0.3",
     "panel>=1.9.3",
     "requests>=2.34.2",
     "scikit-learn==1.6.1",

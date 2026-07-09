@@ -5,6 +5,7 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from flask_cors import CORS
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
@@ -29,15 +30,16 @@ def predict_air_quality():
         return jsonify({'status': 'error', 'message': f'Lipsesc câmpuri: {missing_fields}'}), 400
 
     try:
-        input_data = [
-            float(data['CO AQI Value']),
-            float(data['Ozone AQI Value']),
-            float(data['NO2 AQI Value']),
-            float(data['PM2.5 AQI Value'])
-        ]
-        input_array = np.array([input_data])
+        input_data = {
+            'CO AQI Value': [float(data['CO AQI Value'])],
+            'Ozone AQI Value': [float(data['Ozone AQI Value'])],
+            'NO2 AQI Value': [float(data['NO2 AQI Value'])],
+            'PM2.5 AQI Value': [float(data['PM2.5 AQI Value'])]
+        }
         
-        prediction_numeric = model.predict(input_array)[0]
+        input_df = pd.DataFrame(input_data)
+        
+        prediction_numeric = model.predict(input_df)[0]
         prediction_text = label_encoder.inverse_transform([prediction_numeric])[0]
         
         return jsonify({
