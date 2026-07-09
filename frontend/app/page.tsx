@@ -82,7 +82,8 @@ const App: React.FC = () => {
     setResult(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:5001/api/v1/predict", {
+      const url = process.env.URL_API || "http://127.0.0.1:5001";
+      const response = await fetch(`${url}/api/v1/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
