@@ -30,6 +30,14 @@ const App: React.FC = () => {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const defaultMap: ColorConfig = {
+    color: "text-gray-700",
+    bg: "bg-gray-100",
+    border: "border-gray-300",
+    title: "Unknown Risk",
+    msg: "We received data, but couldn't classify the risk correctly.",
+  };
+
   const colorMap: ColorMapType = {
     Good: {
       color: "text-green-600",
@@ -44,6 +52,13 @@ const App: React.FC = () => {
       border: "border-yellow-200",
       title: "Moderate Quality",
       msg: "Acceptable, but sensitive individuals should reduce outdoor exertion.",
+    },
+    "Unhealthy for Sensitive Groups": {
+      color: "text-orange-500",
+      bg: "bg-orange-50",
+      border: "border-orange-200",
+      title: "Sensitive Risk",
+      msg: "Members of sensitive groups may experience health effects. The general public is likely fine.",
     },
     Unhealthy: {
       color: "text-red-500",
@@ -160,24 +175,32 @@ const App: React.FC = () => {
             </div>
           )}
 
-          {result && colorMap[result] && (
+          {result && (
             <div
-              className={`p-8 rounded-xl border text-center transition-all ${colorMap[result].bg} ${colorMap[result].border}`}
+              className={`p-8 rounded-xl border text-center transition-all ${
+                (colorMap[result] || defaultMap).bg
+              } ${(colorMap[result] || defaultMap).border}`}
             >
               <p className="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-2">
                 Identified Risk Index
               </p>
               <h2
-                className={`text-3xl font-bold mb-1 ${colorMap[result].color}`}
+                className={`text-3xl font-bold mb-1 ${
+                  (colorMap[result] || defaultMap).color
+                }`}
               >
-                {colorMap[result].title}
+                {(colorMap[result] || defaultMap).title}
               </h2>
               <span
-                className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 bg-white shadow-sm ${colorMap[result].color}`}
+                className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 bg-white shadow-sm ${
+                  (colorMap[result] || defaultMap).color
+                }`}
               >
                 {result}
               </span>
-              <p className="text-gray-600 text-sm">{colorMap[result].msg}</p>
+              <p className="text-gray-600 text-sm">
+                {(colorMap[result] || defaultMap).msg}
+              </p>
             </div>
           )}
         </div>
