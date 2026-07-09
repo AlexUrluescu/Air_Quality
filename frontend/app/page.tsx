@@ -82,9 +82,7 @@ const App: React.FC = () => {
     setResult(null);
 
     try {
-      const url = process.env.URL_API || "http://127.0.0.1:5001";
-
-      console.log("url", url);
+      const url = process.env.NEXT_PUBLIC_URL_API || "http://127.0.0.1:5001";
       const response = await fetch(`${url}/api/v1/predict`, {
         method: "POST",
         headers: {
